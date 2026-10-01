@@ -8,10 +8,11 @@ settings_dir="$(git rev-parse --show-toplevel)/.github/settings"
 gh api --silent -X PATCH 'repos/{owner}/{repo}' --input "$settings_dir/repository.json"
 echo "Applied repository settings"
 
-# Dependabot alerts and security updates have their own endpoints
+# Security features have their own endpoints
 gh api --silent -X PUT 'repos/{owner}/{repo}/vulnerability-alerts'
 gh api --silent -X PUT 'repos/{owner}/{repo}/automated-security-fixes'
-echo "Enabled Dependabot alerts and security updates"
+gh api --silent -X PUT 'repos/{owner}/{repo}/private-vulnerability-reporting'
+echo "Enabled Dependabot alerts, security updates and private vulnerability reporting"
 
 # Rulesets are matched by name: update the existing one or create it
 for file in "$settings_dir"/rulesets/*.json; do

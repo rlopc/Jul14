@@ -6,3 +6,5 @@ config:
 ignores:
   # Only holds an @-import for Claude Code, not a document
   - CLAUDE.md
+  # A pull request body fragment, not a standalone document
+  - .github/pull_request_template.md

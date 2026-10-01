@@ -9,11 +9,11 @@ Status: initial setup. Project scope not yet defined.
 
 ## Development
 
-Git hooks are managed with [pre-commit](https://pre-commit.com/). Install it with [uv](https://docs.astral.sh/uv/) and enable the hooks once after cloning:
+Development tools are managed with [uv](https://docs.astral.sh/uv/): `pyproject.toml` declares them and `uv.lock` pins the exact versions, shared with CI. Git hooks are managed with [pre-commit](https://pre-commit.com/). Install the tools and enable the hooks once after cloning:
 
 ```sh
-uv tool install pre-commit --with pre-commit-uv
-pre-commit install
+uv sync
+uv run pre-commit install
 ```
 
 ### GitHub settings

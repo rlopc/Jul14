@@ -1,0 +1,17 @@
+# Development tooling manifest; uv.lock pins the exact versions used locally and in CI
+[project]
+name = "jul14"
+version = "0.0.0"
+requires-python = ">=3.14"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pre-commit-uv>=4.3.0",
+]
+
+[tool.uv]
+# Not an installable package, only a set of development tools
+package = false
+# Floor for local work; CI pins the exact uv version in its workflows
+required-version = ">=0.12"

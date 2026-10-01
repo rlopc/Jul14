@@ -7,23 +7,31 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
+# A newer check supersedes a running one
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    # The App private key lives in this environment, usable only from main
+    environment: automation
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
-      # Reading administration settings needs more than GITHUB_TOKEN can be granted
+      # GitHub only returns merge settings and ruleset bypass actors to tokens that can edit them,
+      # so this read-only check needs administration write; GITHUB_TOKEN cannot be granted it
       - id: app-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
         with:
           client-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
-          permission-administration: read
+          permission-administration: write
       - env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: scripts/github-settings.sh check

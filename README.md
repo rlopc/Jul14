@@ -26,7 +26,7 @@ scripts/verify.sh
 
 ### GitHub settings
 
-Repository settings, Actions token permissions and branch rulesets are versioned in `.github/settings/`; Dependabot alerts, security updates and private vulnerability reporting are enabled by the script below. Change them through a pull request, then apply them with an account that has admin rights:
+Repository settings, Actions token permissions, environments and branch rulesets are versioned in `.github/settings/`; Dependabot alerts, security updates and private vulnerability reporting are enabled by the script below. Change them through a pull request, then apply them with an account that has admin rights:
 
 ```sh
 scripts/github-settings.sh apply

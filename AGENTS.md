@@ -11,7 +11,7 @@
 - Never read files in `docs/brainstorm/` or bring their content into context (including through search results) unless the user explicitly asks for it.
 - Reference documents by path (e.g. `docs/decisions/`), not with `@path` imports: Claude Code loads imported files into every session.
 - `main` holds only agreed content. Work in progress (research, comparisons, drafts) lives in a branch and is discarded once a decision is made.
-- Record each significant architecture decision as an ADR in `docs/decisions/`: context, options considered, decision, and consequences.
+- Record each significant architecture decision as an ADR in `docs/decisions/`, copying `adr-template.md` to `NNNN-short-title.md` with the next sequential number. Accepted ADRs are immutable: to change a decision, write a new ADR that supersedes the old one.
 
 ## Tooling
 

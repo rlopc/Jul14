@@ -27,3 +27,16 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: build
+
+  # Development tools locked in uv.lock (pre-commit and its plugin)
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      uv:
+        patterns: ["*"]
+    commit-message:
+      prefix: build

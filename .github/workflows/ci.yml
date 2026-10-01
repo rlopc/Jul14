@@ -28,4 +28,4 @@ jobs:
           key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
       - run: uv tool install pre-commit --with pre-commit-uv
       - run: pre-commit run --all-files --show-diff-on-failure
-      - run: pre-commit run gitleaks-history --hook-stage manual
+      - run: pre-commit run gitleaks-history --hook-stage manual --all-files

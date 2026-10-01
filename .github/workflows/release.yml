@@ -1,0 +1,30 @@
+# Keep a release PR up to date from Conventional Commits; merging it tags vX.Y.Z and publishes a GitHub release
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Never cancel a run that may be tagging a release
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+# The job writes through the GitHub App token, not GITHUB_TOKEN
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # A GitHub App token, because pull requests opened with GITHUB_TOKEN do not trigger the required checks
+      - id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          client-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7  # v5.0.0
+        with:
+          token: ${{ steps.app-token.outputs.token }}

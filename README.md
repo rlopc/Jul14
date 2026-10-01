@@ -1,6 +1,6 @@
-# jul14
+# Jul14
 
-Status: initial setup. Project scope not yet defined.
+Status: the repository base (tooling, CI, security and release automation) is in place; the project scope is not yet defined.
 
 ## Documentation
 
@@ -33,6 +33,14 @@ scripts/github-settings.sh apply
 ```
 
 A scheduled workflow runs `scripts/github-settings.sh check` every week and fails if the live settings no longer match the versioned ones.
+
+### Automation App
+
+The release and settings drift workflows authenticate as a GitHub App installed only on this repository, because pull requests opened with `GITHUB_TOKEN` do not trigger the required checks and `GITHUB_TOKEN` cannot read administration settings.
+
+- Repository permissions: Contents (read and write), Pull requests (read and write), Administration (read and write). Each workflow requests only what it needs.
+- Client ID: the `AUTOMATION_APP_CLIENT_ID` repository variable.
+- Private key: the `AUTOMATION_APP_PRIVATE_KEY` secret of the `automation` environment, which only `main` can use. To rotate it, generate a new key in the App settings, store it with `gh secret set AUTOMATION_APP_PRIVATE_KEY --env automation`, then delete the old key.
 
 ## License
 

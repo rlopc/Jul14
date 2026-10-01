@@ -24,5 +24,6 @@ jobs:
           # The secret scan inside the container reads the whole history
           fetch-depth: 0
           persist-credentials: false
+      # Dependabot cannot bump the CLI version in these commands; update it by hand
       - run: npx --yes @devcontainers/cli@0.89.0 up --workspace-folder .
       - run: npx --yes @devcontainers/cli@0.89.0 exec --workspace-folder . scripts/verify.sh

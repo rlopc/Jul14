@@ -1,4 +1,4 @@
-# Weekly, grouped version updates for everything pinned in the repository
+# Weekly, grouped version updates for every pinned dependency, except the few marked "update it by hand"
 version: 2
 
 updates:

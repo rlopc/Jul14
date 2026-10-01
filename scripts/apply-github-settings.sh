@@ -8,6 +8,9 @@ settings_dir="$(git rev-parse --show-toplevel)/.github/settings"
 gh api --silent -X PATCH 'repos/{owner}/{repo}' --input "$settings_dir/repository.json"
 echo "Applied repository settings"
 
+gh api --silent -X PUT 'repos/{owner}/{repo}/actions/permissions/workflow' --input "$settings_dir/actions-permissions.json"
+echo "Applied GitHub Actions token permissions"
+
 # Security features have their own endpoints
 gh api --silent -X PUT 'repos/{owner}/{repo}/vulnerability-alerts'
 gh api --silent -X PUT 'repos/{owner}/{repo}/automated-security-fixes'

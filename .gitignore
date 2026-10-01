@@ -12,3 +12,8 @@ CLAUDE.local.md
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Local environment files may hold secrets; only the documented example is shared
+.env
+.env.*
+!.env.example

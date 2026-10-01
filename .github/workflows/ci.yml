@@ -1,0 +1,31 @@
+# Re-run the git hooks on the server: local hooks can be skipped with --no-verify
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    env:
+      # Local-only guard; on the server a ruleset protects main
+      SKIP: no-commit-to-branch
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          # The secret scan reads the whole history
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+      - run: uv tool install pre-commit --with pre-commit-uv
+      - run: pre-commit run --all-files --show-diff-on-failure
+      - run: pre-commit run gitleaks-history --hook-stage manual --all-files

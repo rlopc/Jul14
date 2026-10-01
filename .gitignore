@@ -1,0 +1,14 @@
+# Personal Claude Code files
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Session inbox: undecided items, triaged with the user
+.scratch/
+
+# Brainstorm notes: kept locally, never committed
+/docs/brainstorm/
+
+# IDEs
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

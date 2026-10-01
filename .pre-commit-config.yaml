@@ -1,0 +1,52 @@
+# Install both hook stages with a plain `pre-commit install`
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
+# Hooks run on file changes only; commit-msg hooks opt in explicitly
+default_stages:
+  - pre-commit
+
+repos:
+  # Block commits that contain secrets before they reach git history
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e  # frozen: v8.30.1
+    hooks:
+      - id: gitleaks
+      # The hook above only scans staged changes; CI scans the whole history
+      - id: gitleaks
+        alias: gitleaks-history
+        name: Detect hardcoded secrets in git history
+        entry: gitleaks git --redact --verbose
+        stages: [manual]
+
+  # Enforce Conventional Commits in commit messages
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: 3db014c16a9d31997ab8c07a4d61fcce936c8f0d  # frozen: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+
+  # Enforce the .editorconfig rules on every text file
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: e8b4e28241a9ae8296ba6e4a491b5da4eda73283  # frozen: 3.11.1
+    hooks:
+      - id: editorconfig-checker
+
+  # Lint Markdown style
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: 916ad0aaa108c64d294101002066f530ea170b10  # frozen: v0.23.3
+    hooks:
+      - id: markdownlint-cli2
+
+  # Generic file sanity checks not covered by .editorconfig
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-case-conflict
+      # Work goes through branches; main holds only agreed content
+      - id: no-commit-to-branch

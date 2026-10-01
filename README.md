@@ -23,3 +23,7 @@ Repository settings and branch rulesets are versioned in `.github/settings/`. Ch
 ```sh
 scripts/apply-github-settings.sh
 ```
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).

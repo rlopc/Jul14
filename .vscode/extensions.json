@@ -3,6 +3,7 @@
     "editorconfig.editorconfig",
     "davidanson.vscode-markdownlint",
     "timonwong.shellcheck",
-    "github.vscode-github-actions"
+    "github.vscode-github-actions",
+    "ms-vscode-remote.remote-containers"
   ]
 }

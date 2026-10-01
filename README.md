@@ -16,6 +16,8 @@ uv sync
 uv run pre-commit install
 ```
 
+A [dev container](https://containers.dev/) in `.devcontainer/` provides the same tools without installing anything locally; it runs the setup above on creation.
+
 Run every check on the whole repository, exactly as CI does:
 
 ```sh

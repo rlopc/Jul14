@@ -1,0 +1,16 @@
+{
+  "name": "Jul14",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1.1.3": {}
+  },
+  "containerEnv": {
+    "UV_PROJECT_ENVIRONMENT": "/home/vscode/.venv"
+  },
+  "remoteEnv": {
+    "PATH": "/home/vscode/.venv/bin:${containerEnv:PATH}"
+  },
+  "postCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && uv sync --locked && { [ -f .git/hooks/pre-commit ] || uv run --locked pre-commit install; }"
+}

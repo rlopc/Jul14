@@ -40,3 +40,29 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: build
+
+  # Dev container images: the base image and uv (FROM lines in the Dockerfile)
+  - package-ecosystem: docker
+    directory: /.devcontainer
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      docker:
+        patterns: ["*"]
+    commit-message:
+      prefix: build
+
+  # Dev container features
+  - package-ecosystem: devcontainers
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      devcontainers:
+        patterns: ["*"]
+    commit-message:
+      prefix: build

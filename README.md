@@ -16,6 +16,12 @@ uv sync
 uv run pre-commit install
 ```
 
+Run every check on the whole repository, exactly as CI does:
+
+```sh
+scripts/verify.sh
+```
+
 ### GitHub settings
 
 Repository settings, Actions token permissions and branch rulesets are versioned in `.github/settings/`; Dependabot alerts, security updates and private vulnerability reporting are enabled by the script below. Change them through a pull request, then apply them with an account that has admin rights:

@@ -24,5 +24,6 @@
 ## Workflow
 
 - Use GitHub Flow: short-lived branches named `<type>/<short-description>` (Conventional Commits types), merged into `main` through pull requests.
+- Pull requests are squash-merged once CI passes; the PR title becomes the commit message, so it must follow Conventional Commits.
 - Proposals are not decisions until the user explicitly marks them as such (e.g. by asking to apply them).
 - Undecided items from a session go to `.scratch/inbox.md` (git-ignored) and are triaged with the user.

@@ -15,3 +15,11 @@ Git hooks are managed with [pre-commit](https://pre-commit.com/). Install it wit
 uv tool install pre-commit --with pre-commit-uv
 pre-commit install
 ```
+
+### GitHub settings
+
+Repository settings and branch rulesets are versioned in `.github/settings/`. Change them through a pull request, then apply them with an account that has admin rights:
+
+```sh
+scripts/apply-github-settings.sh
+```

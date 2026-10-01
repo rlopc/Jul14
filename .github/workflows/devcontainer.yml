@@ -1,0 +1,28 @@
+# Build the dev container and run every check inside it whenever its definition changes
+name: Dev container
+
+on:
+  pull_request:
+    paths:
+      - ".devcontainer/**"
+      - ".github/workflows/devcontainer.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          # The secret scan inside the container reads the whole history
+          fetch-depth: 0
+          persist-credentials: false
+      - run: npx --yes @devcontainers/cli@0.89.0 up --workspace-folder .
+      - run: npx --yes @devcontainers/cli@0.89.0 exec --workspace-folder . scripts/verify.sh

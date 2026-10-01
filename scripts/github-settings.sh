@@ -71,6 +71,40 @@ else
       '{dependabot_alerts: $alerts, dependabot_security_updates: $updates, private_vulnerability_reporting: $reporting}')"
 fi
 
+# Environments: their protection and the branches allowed to use them
+versioned_envs=()
+for file in "$settings_dir"/environments/*.json; do
+  name="$(jq -r .name "$file")"
+  versioned_envs+=("$name")
+  if [[ "$mode" == apply ]]; then
+    jq '{deployment_branch_policy}' "$file" |
+      gh api --silent -X PUT "repos/{owner}/{repo}/environments/$name" --input -
+    policies="repos/{owner}/{repo}/environments/$name/deployment-branch-policies"
+    live="$(gh api "$policies" --jq '.branch_policies[] | "\(.id) \(.name)"')"
+    # Add the missing branches and remove the ones no longer versioned
+    for branch in $(jq -r '.deployment_branches[]' "$file"); do
+      grep -q " $branch\$" <<<"$live" ||
+        gh api --silent -X POST "$policies" -f name="$branch" -f type=branch
+    done
+    while read -r id branch; do
+      [[ -z "$id" ]] && continue
+      jq -e --arg b "$branch" '.deployment_branches | index($b)' "$file" >/dev/null ||
+        gh api --silent -X DELETE "$policies/$id"
+    done <<<"$live"
+    echo "Applied environment: $name"
+  else
+    if ! live="$(gh api "repos/{owner}/{repo}/environments/$name" 2>/dev/null)"; then
+      echo "DRIFT: environment missing on GitHub: $name"
+      drift=1
+    else
+      branches="$(gh api "repos/{owner}/{repo}/environments/$name/deployment-branch-policies" \
+        --jq '[.branch_policies[].name] | sort')"
+      compare "environment $name" "$(jq '{deployment_branch_policy, deployment_branches: (.deployment_branches | sort)}' "$file")" \
+        "$(jq --argjson b "$branches" '{deployment_branch_policy: {protected_branches: .deployment_branch_policy.protected_branches, custom_branch_policies: .deployment_branch_policy.custom_branch_policies}, deployment_branches: $b}' <<<"$live")"
+    fi
+  fi
+done
+
 # Rulesets are matched by name: apply updates the existing one or creates it
 versioned_names=()
 for file in "$settings_dir"/rulesets/*.json; do
@@ -95,6 +129,14 @@ for file in "$settings_dir"/rulesets/*.json; do
 done
 
 if [[ "$mode" == check ]]; then
+  # Environments created on GitHub but never versioned
+  while IFS= read -r name; do
+    if [[ ! " ${versioned_envs[*]} " == *" $name "* ]]; then
+      echo "DRIFT: environment not versioned: $name"
+      drift=1
+    fi
+  done < <(gh api 'repos/{owner}/{repo}/environments' --jq '.environments[].name')
+
   # Rulesets created on GitHub but never versioned
   while IFS= read -r name; do
     if [[ ! " ${versioned_names[*]} " == *" $name "* ]]; then

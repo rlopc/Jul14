@@ -16,6 +16,8 @@ permissions: {}
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    # The App private key lives in this environment, usable only from main
+    environment: automation
     steps:
       # A GitHub App token, because pull requests opened with GITHUB_TOKEN do not trigger the required checks
       - id: app-token

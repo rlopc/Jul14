@@ -3,6 +3,10 @@ default_install_hook_types:
   - pre-commit
   - commit-msg
 
+# Hooks run on file changes only; commit-msg hooks opt in explicitly
+default_stages:
+  - pre-commit
+
 repos:
   # Block commits that contain secrets before they reach git history
   - repo: https://github.com/gitleaks/gitleaks
